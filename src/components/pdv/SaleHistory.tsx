@@ -41,6 +41,7 @@ export const SaleHistory = () => {
             <TableRow>
               <TableHead>Data/Hora</TableHead>
               <TableHead>Itens</TableHead>
+              <TableHead>Pagamento</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Observações</TableHead>
             </TableRow>
@@ -59,6 +60,13 @@ export const SaleHistory = () => {
                       </Badge>
                     ))}
                   </div>
+                </TableCell>
+                <TableCell>
+                  {sale.payment_method && (
+                    <Badge variant="secondary">
+                      {sale.payment_method}
+                    </Badge>
+                  )}
                 </TableCell>
                 <TableCell className="font-bold text-green-600">
                   R$ {Number(sale.total_amount).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}

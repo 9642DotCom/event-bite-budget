@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, TrendingUp, TrendingDown, Target } from "lucide-react";
 import { MonthlyChart } from "./MonthlyChart";
 import { TopProducts } from "./TopProducts";
+import { PaymentMethodChart } from "./PaymentMethodChart";
 
 export const Dashboard = () => {
   const currentMonth = new Date().toISOString().slice(0, 7);
@@ -104,8 +105,16 @@ export const Dashboard = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <MonthlyChart />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <MonthlyChart />
+        </div>
+        <div>
+          <PaymentMethodChart />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
         <TopProducts />
       </div>
     </div>

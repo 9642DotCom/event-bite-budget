@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, ShoppingCart, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { CartItem } from "./PDVPage";
@@ -22,19 +23,22 @@ export const SaleCart = ({ cart, onUpdateItem, onClearCart, onSaleComplete }: Sa
   const { toast } = useToast();
   const [clientName, setClientName] = useState("");
   const [notes, setNotes] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
 
   const total = cart.reduce((sum, item) => sum + item.total, 0);
 
   const completeSaleMutation = useMutation({
     mutationFn: async () => {
       if (cart.length === 0) throw new Error("Carrinho vazio");
+      if (!paymentMethod) throw new Error("Selecione o meio de pagamento");
 
       // Criar a venda
       const { data: sale, error: saleError } = await supabase
         .from("sales")
         .insert([{
           total_amount: total,
-          notes: notes || null
+          notes: notes || null,
+          payment_method: paymentMethod
         }])
         .select()
         .single();
@@ -64,8 +68,9 @@ export const SaleCart = ({ cart, onUpdateItem, onClearCart, onSaleComplete }: Sa
           client_name: clientName || "Venda PDV",
           payment_date: new Date().toISOString().split('T')[0],
           amount: total,
-          notes: notes || `Venda PDV - ${cart.length} itens`,
-          sale_id: sale.id
+          notes: notes || `Venda PDV - ${cart.length} itens - ${paymentMethod}`,
+          sale_id: sale.id,
+          payment_method: paymentMethod
         }]);
 
       if (revenueError) throw revenueError;
@@ -79,12 +84,13 @@ export const SaleCart = ({ cart, onUpdateItem, onClearCart, onSaleComplete }: Sa
       });
       setClientName("");
       setNotes("");
+      setPaymentMethod("");
       onSaleComplete();
     },
     onError: (error) => {
       toast({
         title: "Erro na venda",
-        description: "Ocorreu um erro ao finalizar a venda.",
+        description: error.message || "Ocorreu um erro ao finalizar a venda.",
         variant: "destructive",
       });
     },
@@ -153,6 +159,23 @@ export const SaleCart = ({ cart, onUpdateItem, onClearCart, onSaleComplete }: Sa
               </div>
 
               <div>
+                <Label htmlFor="payment_method">Meio de Pagamento *</Label>
+                <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o meio de pagamento" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Dinheiro">Dinheiro</SelectItem>
+                    <SelectItem value="Cartão de Débito">Cartão de Débito</SelectItem>
+                    <SelectItem value="Cartão de Crédito">Cartão de Crédito</SelectItem>
+                    <SelectItem value="PIX">PIX</SelectItem>
+                    <SelectItem value="Transferência">Transferência</SelectItem>
+                    <SelectItem value="Cheque">Cheque</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
                 <Label htmlFor="notes">Observações</Label>
                 <Textarea
                   id="notes"
@@ -169,7 +192,7 @@ export const SaleCart = ({ cart, onUpdateItem, onClearCart, onSaleComplete }: Sa
 
               <Button 
                 onClick={() => completeSaleMutation.mutate()}
-                disabled={completeSaleMutation.isPending}
+                disabled={completeSaleMutation.isPending || !paymentMethod}
                 className="w-full"
                 size="lg"
               >
