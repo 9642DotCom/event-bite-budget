@@ -22,23 +22,39 @@ export const RevenueForm = ({ onClose, onSuccess, revenue }: RevenueFormProps) =
     source_type: revenue?.source_type || "ONG",
     client_name: revenue?.client_name || "",
     payment_date: revenue?.payment_date || new Date().toISOString().slice(0, 10),
-    amount: revenue?.amount || "",
+    amount: revenue?.amount ? revenue.amount.toString() : "",
     notes: revenue?.notes || ""
   });
 
   const mutation = useMutation({
     mutationFn: async (data: typeof formData) => {
+      const payload = {
+        source_type: data.source_type,
+        client_name: data.client_name,
+        payment_date: data.payment_date,
+        amount: parseFloat(data.amount),
+        notes: data.notes || null
+      };
+
+      console.log("Enviando dados:", payload);
+
       if (revenue) {
         const { error } = await supabase
           .from("revenues")
-          .update(data)
+          .update(payload)
           .eq("id", revenue.id);
-        if (error) throw error;
+        if (error) {
+          console.error("Erro ao atualizar:", error);
+          throw error;
+        }
       } else {
         const { error } = await supabase
           .from("revenues")
-          .insert([data]);
-        if (error) throw error;
+          .insert([payload]);
+        if (error) {
+          console.error("Erro ao inserir:", error);
+          throw error;
+        }
       }
     },
     onSuccess: () => {
@@ -48,10 +64,11 @@ export const RevenueForm = ({ onClose, onSuccess, revenue }: RevenueFormProps) =
       });
       onSuccess();
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      console.error("Erro na mutação:", error);
       toast({
         title: "Erro",
-        description: "Ocorreu um erro ao salvar a receita.",
+        description: error.message || "Ocorreu um erro ao salvar a receita.",
         variant: "destructive",
       });
     },
@@ -59,6 +76,35 @@ export const RevenueForm = ({ onClose, onSuccess, revenue }: RevenueFormProps) =
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validações básicas
+    if (!formData.client_name.trim()) {
+      toast({
+        title: "Erro",
+        description: "Nome do cliente é obrigatório.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.amount || parseFloat(formData.amount) <= 0) {
+      toast({
+        title: "Erro",
+        description: "Valor deve ser maior que zero.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.payment_date) {
+      toast({
+        title: "Erro",
+        description: "Data do pagamento é obrigatória.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     mutation.mutate(formData);
   };
 
@@ -95,6 +141,7 @@ export const RevenueForm = ({ onClose, onSuccess, revenue }: RevenueFormProps) =
               value={formData.client_name}
               onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
               required
+              placeholder="Digite o nome do cliente ou ONG"
             />
           </div>
 
@@ -115,9 +162,11 @@ export const RevenueForm = ({ onClose, onSuccess, revenue }: RevenueFormProps) =
               id="amount"
               type="number"
               step="0.01"
+              min="0.01"
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               required
+              placeholder="0,00"
             />
           </div>
 
@@ -128,6 +177,7 @@ export const RevenueForm = ({ onClose, onSuccess, revenue }: RevenueFormProps) =
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
               rows={3}
+              placeholder="Observações opcionais..."
             />
           </div>
 
