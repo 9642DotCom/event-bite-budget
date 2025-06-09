@@ -95,6 +95,68 @@ export type Database = {
         }
         Relationships: []
       }
+      expense_types: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount: number
+          created_at: string | null
+          description: string
+          expense_type_id: string | null
+          id: string
+          notes: string | null
+          purchase_date: string
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          description: string
+          expense_type_id?: string | null
+          id?: string
+          notes?: string | null
+          purchase_date: string
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          description?: string
+          expense_type_id?: string | null
+          id?: string
+          notes?: string | null
+          purchase_date?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_expense_type_id_fkey"
+            columns: ["expense_type_id"]
+            isOneToOne: false
+            referencedRelation: "expense_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       history: {
         Row: {
           appointment_id: string | null
@@ -143,6 +205,39 @@ export type Database = {
           },
         ]
       }
+      products: {
+        Row: {
+          active: boolean | null
+          cost_price: number
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          sell_price: number
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          cost_price?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          sell_price?: number
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          cost_price?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          sell_price?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -163,6 +258,114 @@ export type Database = {
           email?: string | null
           id?: string
           name?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      revenues: {
+        Row: {
+          amount: number
+          client_name: string
+          created_at: string | null
+          id: string
+          notes: string | null
+          payment_date: string
+          sale_id: string | null
+          source_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          client_name: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          payment_date: string
+          sale_id?: string | null
+          source_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          client_name?: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          sale_id?: string | null
+          source_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      sale_items: {
+        Row: {
+          created_at: string | null
+          id: string
+          product_id: string | null
+          quantity: number
+          sale_id: string | null
+          total_price: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          product_id?: string | null
+          quantity?: number
+          sale_id?: string | null
+          total_price: number
+          unit_price: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          product_id?: string | null
+          quantity?: number
+          sale_id?: string | null
+          total_price?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sale_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sale_items_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales: {
+        Row: {
+          created_at: string | null
+          id: string
+          notes: string | null
+          sale_date: string
+          total_amount: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          sale_date?: string
+          total_amount?: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          sale_date?: string
+          total_amount?: number
           updated_at?: string | null
         }
         Relationships: []
