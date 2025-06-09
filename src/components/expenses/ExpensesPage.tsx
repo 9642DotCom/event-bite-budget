@@ -28,9 +28,16 @@ export const ExpensesPage = () => {
         `);
       
       if (filters.month) {
+        // Calcular o primeiro e último dia do mês corretamente
+        const year = parseInt(filters.month.split('-')[0]);
+        const month = parseInt(filters.month.split('-')[1]);
+        const firstDay = `${year}-${month.toString().padStart(2, '0')}-01`;
+        const lastDay = new Date(year, month, 0).getDate();
+        const lastDayFormatted = `${year}-${month.toString().padStart(2, '0')}-${lastDay}`;
+        
         query = query
-          .gte("purchase_date", `${filters.month}-01`)
-          .lt("purchase_date", `${filters.month}-32`);
+          .gte("purchase_date", firstDay)
+          .lte("purchase_date", lastDayFormatted);
       }
       
       if (filters.description) {
