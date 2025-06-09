@@ -23,9 +23,14 @@ export const RevenuesPage = () => {
       let query = supabase.from("revenues").select("*");
       
       if (filters.month) {
+        // Calcular corretamente o último dia do mês para evitar datas inválidas
+        const year = parseInt(filters.month.split('-')[0]);
+        const month = parseInt(filters.month.split('-')[1]);
+        const lastDay = new Date(year, month, 0).getDate();
+        
         query = query
           .gte("payment_date", `${filters.month}-01`)
-          .lt("payment_date", `${filters.month}-32`);
+          .lte("payment_date", `${filters.month}-${lastDay.toString().padStart(2, '0')}`);
       }
       
       if (filters.client) {
