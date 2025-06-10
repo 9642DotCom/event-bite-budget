@@ -8,6 +8,7 @@ import { RevenuesPage } from "@/components/revenues/RevenuesPage";
 import { ExpensesPage } from "@/components/expenses/ExpensesPage";
 import { ProductsPage } from "@/components/products/ProductsPage";
 import { PDVPage } from "@/components/pdv/PDVPage";
+import { CostCalculatorPage } from "@/components/cost-calculator/CostCalculatorPage";
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState("dashboard");
@@ -24,6 +25,8 @@ const Index = () => {
         return <ProductsPage />;
       case "pdv":
         return <PDVPage />;
+      case "cost-calculator":
+        return <CostCalculatorPage />;
       default:
         return <Dashboard />;
     }

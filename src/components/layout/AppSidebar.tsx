@@ -6,7 +6,8 @@ import {
   TrendingDown, 
   Package, 
   Calculator,
-  DollarSign
+  DollarSign,
+  PieChart
 } from "lucide-react";
 import {
   Sidebar,
@@ -32,6 +33,7 @@ export const AppSidebar = ({ currentPage, onPageChange }: AppSidebarProps) => {
     { id: "revenues", label: "Receitas", icon: TrendingUp },
     { id: "expenses", label: "Despesas", icon: TrendingDown },
     { id: "products", label: "Produtos", icon: Package },
+    { id: "cost-calculator", label: "Calculadora de Custos", icon: PieChart },
   ];
 
   return (
