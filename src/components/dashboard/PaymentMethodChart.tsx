@@ -29,14 +29,14 @@ export const PaymentMethodChart = () => {
       
       if (error) throw error;
       
-      const groupedData = data.reduce((acc: any, item) => {
+      const groupedData = data?.reduce((acc: any, item) => {
         const method = item.payment_method || "Não informado";
         if (!acc[method]) {
           acc[method] = 0;
         }
         acc[method] += Number(item.amount);
         return acc;
-      }, {});
+      }, {}) || {};
 
       return Object.entries(groupedData).map(([method, amount]) => ({
         name: method,
