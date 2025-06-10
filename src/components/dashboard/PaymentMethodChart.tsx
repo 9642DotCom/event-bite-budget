@@ -59,14 +59,14 @@ export const PaymentMethodChart = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CreditCard className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+          <CreditCard className="h-4 w-4 md:h-5 md:w-5" />
           Meios de Pagamento
         </CardTitle>
       </CardHeader>
       <CardContent>
         {paymentData && paymentData.length > 0 ? (
-          <ChartContainer config={chartConfig} className="h-[300px]">
+          <ChartContainer config={chartConfig} className="h-[200px] md:h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -75,10 +75,15 @@ export const PaymentMethodChart = () => {
                   nameKey="name"
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
+                  outerRadius={60}
+                  className="md:outerRadius-80"
                   label={({ name, percent }) => 
                     `${name} ${(percent * 100).toFixed(1)}%`
                   }
+                  labelStyle={{
+                    fontSize: '10px',
+                    fill: 'var(--foreground)'
+                  }}
                 >
                   {paymentData.map((entry, index) => (
                     <Cell 
@@ -98,7 +103,7 @@ export const PaymentMethodChart = () => {
             </ResponsiveContainer>
           </ChartContainer>
         ) : (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-muted-foreground">
             Nenhum dado de pagamento disponível
           </div>
         )}

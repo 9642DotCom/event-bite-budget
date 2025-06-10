@@ -56,17 +56,31 @@ export const MonthlyChart = () => {
         <CardTitle>Evolução Mensal</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={250} className="md:h-[300px]">
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis />
+            <XAxis 
+              dataKey="month" 
+              fontSize={12}
+              className="text-xs"
+            />
+            <YAxis 
+              fontSize={12}
+              className="text-xs"
+            />
             <Tooltip 
               formatter={(value: number) => [
                 `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
               ]}
+              contentStyle={{
+                fontSize: '12px'
+              }}
             />
-            <Legend />
+            <Legend 
+              wrapperStyle={{
+                fontSize: '12px'
+              }}
+            />
             <Bar dataKey="receitas" fill="#10b981" name="Receitas" />
             <Bar dataKey="despesas" fill="#ef4444" name="Despesas" />
           </BarChart>

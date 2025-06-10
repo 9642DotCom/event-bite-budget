@@ -52,10 +52,10 @@ export const Dashboard = () => {
   const isProfitable = profit >= 0;
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Financeiro</h1>
-        <p className="text-gray-500">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">Dashboard Financeiro</h1>
+        <p className="text-muted-foreground text-sm md:text-base">
           {new Date().toLocaleDateString("pt-BR", { 
             month: "long", 
             year: "numeric" 
@@ -63,14 +63,14 @@ export const Dashboard = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Receitas do Mês</CardTitle>
             <TrendingUp className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-xl md:text-2xl font-bold text-green-600">
               R$ {(monthlyRevenues || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
           </CardContent>
@@ -82,7 +82,7 @@ export const Dashboard = () => {
             <TrendingDown className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">
+            <div className="text-xl md:text-2xl font-bold text-red-600">
               R$ {(monthlyExpenses || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
           </CardContent>
@@ -96,7 +96,7 @@ export const Dashboard = () => {
             <Target className={`h-4 w-4 ${isProfitable ? "text-green-600" : "text-red-600"}`} />
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${isProfitable ? "text-green-600" : "text-red-600"}`}>
+            <div className={`text-xl md:text-2xl font-bold ${isProfitable ? "text-green-600" : "text-red-600"}`}>
               R$ {Math.abs(profit).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
           </CardContent>
@@ -108,15 +108,15 @@ export const Dashboard = () => {
             <DollarSign className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-xl md:text-2xl font-bold text-blue-600">
               {monthlyRevenues ? ((profit / monthlyRevenues) * 100).toFixed(1) : "0.0"}%
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6">
+        <div className="xl:col-span-2">
           <MonthlyChart />
         </div>
         <div>
@@ -124,7 +124,7 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-4 md:gap-6">
         <TopProducts />
       </div>
     </div>
