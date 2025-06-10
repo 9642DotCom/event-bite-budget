@@ -16,17 +16,22 @@ export const MonthlyChart = () => {
 
       const monthlyData = await Promise.all(
         last6Months.map(async (month) => {
+          // Calcular corretamente o último dia do mês
+          const year = parseInt(month.split('-')[0]);
+          const monthNum = parseInt(month.split('-')[1]);
+          const lastDay = new Date(year, monthNum, 0).getDate();
+          
           const [revenuesResult, expensesResult] = await Promise.all([
             supabase
               .from("revenues")
               .select("amount")
               .gte("payment_date", `${month}-01`)
-              .lt("payment_date", `${month}-32`),
+              .lte("payment_date", `${month}-${lastDay.toString().padStart(2, '0')}`),
             supabase
               .from("expenses")
               .select("amount")
               .gte("purchase_date", `${month}-01`)
-              .lt("purchase_date", `${month}-32`)
+              .lte("purchase_date", `${month}-${lastDay.toString().padStart(2, '0')}`)
           ]);
 
           const revenues = revenuesResult.data?.reduce((sum, item) => sum + Number(item.amount), 0) || 0;

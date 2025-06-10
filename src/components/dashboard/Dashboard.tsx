@@ -13,11 +13,16 @@ export const Dashboard = () => {
   const { data: monthlyRevenues } = useQuery({
     queryKey: ["monthly-revenues", currentMonth],
     queryFn: async () => {
+      // Calcular corretamente o último dia do mês
+      const year = parseInt(currentMonth.split('-')[0]);
+      const month = parseInt(currentMonth.split('-')[1]);
+      const lastDay = new Date(year, month, 0).getDate();
+      
       const { data, error } = await supabase
         .from("revenues")
         .select("amount")
         .gte("payment_date", `${currentMonth}-01`)
-        .lt("payment_date", `${currentMonth}-32`);
+        .lte("payment_date", `${currentMonth}-${lastDay.toString().padStart(2, '0')}`);
       
       if (error) throw error;
       return data?.reduce((sum, item) => sum + Number(item.amount), 0) || 0;
@@ -27,11 +32,16 @@ export const Dashboard = () => {
   const { data: monthlyExpenses } = useQuery({
     queryKey: ["monthly-expenses", currentMonth],
     queryFn: async () => {
+      // Calcular corretamente o último dia do mês
+      const year = parseInt(currentMonth.split('-')[0]);
+      const month = parseInt(currentMonth.split('-')[1]);
+      const lastDay = new Date(year, month, 0).getDate();
+      
       const { data, error } = await supabase
         .from("expenses")
         .select("amount")
         .gte("purchase_date", `${currentMonth}-01`)
-        .lt("purchase_date", `${currentMonth}-32`);
+        .lte("purchase_date", `${currentMonth}-${lastDay.toString().padStart(2, '0')}`);
       
       if (error) throw error;
       return data?.reduce((sum, item) => sum + Number(item.amount), 0) || 0;

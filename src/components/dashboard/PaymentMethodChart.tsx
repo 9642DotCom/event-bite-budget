@@ -20,11 +20,16 @@ export const PaymentMethodChart = () => {
   const { data: paymentData } = useQuery({
     queryKey: ["payment-methods", currentMonth],
     queryFn: async () => {
+      // Calcular corretamente o último dia do mês
+      const year = parseInt(currentMonth.split('-')[0]);
+      const month = parseInt(currentMonth.split('-')[1]);
+      const lastDay = new Date(year, month, 0).getDate();
+      
       const { data, error } = await supabase
         .from("revenues")
         .select("payment_method, amount")
         .gte("payment_date", `${currentMonth}-01`)
-        .lt("payment_date", `${currentMonth}-32`)
+        .lte("payment_date", `${currentMonth}-${lastDay.toString().padStart(2, '0')}`)
         .not("payment_method", "is", null);
       
       if (error) throw error;
