@@ -10,8 +10,7 @@ interface CostCalculatorFormProps {
   onCalculate: (
     ingredientsCost: number,
     unitsProduced: number,
-    sellPrice: number,
-    projectedSales: number
+    sellPrice: number
   ) => void;
 }
 
@@ -20,7 +19,6 @@ export const CostCalculatorForm = ({ onCalculate }: CostCalculatorFormProps) => 
     ingredientsCost: "",
     unitsProduced: "",
     sellPrice: "",
-    projectedSales: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -29,16 +27,14 @@ export const CostCalculatorForm = ({ onCalculate }: CostCalculatorFormProps) => 
     const ingredientsCost = parseFloat(formData.ingredientsCost);
     const unitsProduced = parseInt(formData.unitsProduced);
     const sellPrice = parseFloat(formData.sellPrice);
-    const projectedSales = parseInt(formData.projectedSales);
 
     if (
       !isNaN(ingredientsCost) &&
       !isNaN(unitsProduced) &&
       !isNaN(sellPrice) &&
-      !isNaN(projectedSales) &&
       unitsProduced > 0
     ) {
-      onCalculate(ingredientsCost, unitsProduced, sellPrice, projectedSales);
+      onCalculate(ingredientsCost, unitsProduced, sellPrice);
     }
   };
 
@@ -96,20 +92,6 @@ export const CostCalculatorForm = ({ onCalculate }: CostCalculatorFormProps) => 
               placeholder="0.00"
               value={formData.sellPrice}
               onChange={(e) => handleInputChange("sellPrice", e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="projectedSales">
-              Vendas Projetadas (unidades)
-            </Label>
-            <Input
-              id="projectedSales"
-              type="number"
-              placeholder="0"
-              value={formData.projectedSales}
-              onChange={(e) => handleInputChange("projectedSales", e.target.value)}
               required
             />
           </div>

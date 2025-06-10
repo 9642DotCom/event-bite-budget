@@ -13,8 +13,6 @@ export interface CostCalculation {
   sellPrice: number;
   profit: number;
   profitMargin: number;
-  grossRevenue: number;
-  projectedSales: number;
 }
 
 export const CostCalculatorPage = () => {
@@ -23,13 +21,11 @@ export const CostCalculatorPage = () => {
   const handleCalculate = (
     ingredientsCost: number,
     unitsProduced: number,
-    sellPrice: number,
-    projectedSales: number
+    sellPrice: number
   ) => {
     const unitCost = ingredientsCost / unitsProduced;
     const profit = sellPrice - unitCost;
     const profitMargin = (profit / sellPrice) * 100;
-    const grossRevenue = sellPrice * projectedSales;
 
     setCalculation({
       ingredientsCost,
@@ -38,8 +34,6 @@ export const CostCalculatorPage = () => {
       sellPrice,
       profit,
       profitMargin,
-      grossRevenue,
-      projectedSales,
     });
   };
 
