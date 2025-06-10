@@ -80,10 +80,6 @@ export const PaymentMethodChart = () => {
                   label={({ name, percent }) => 
                     `${name} ${(percent * 100).toFixed(1)}%`
                   }
-                  labelStyle={{
-                    fontSize: '10px',
-                    fill: 'var(--foreground)'
-                  }}
                 >
                   {paymentData.map((entry, index) => (
                     <Cell 
